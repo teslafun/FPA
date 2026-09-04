@@ -1,0 +1,31 @@
+TaskID,Completed
+Consolidation|Closing Initialization|Center,True
+TOPLINE|TM1 Sales and COGS loading|Center,True
+Headcount|Headcount import|Center,True
+Consolidation|FX rates loading|Center,True
+Consolidation|Staging Load|Center,True
+TOPLINE|Sales Loop|Center,True
+TOPLINE|CDMO Revenue Load|Center,True
+TOPLINE|Reference Standard COGS loading|Center,True
+TOPLINE|Other Revenue|Center,True
+TOPLINE|Sales Flash|Center,True
+Headcount|Hierarchy syncing|Center,True
+Consolidation|D&A Loading|Center,True
+Consolidation|Site Submission|Ujpest,True
+Consolidation|Site Submission|Frankfurt,True
+Consolidation|Site Submission|Brindisi,True
+Consolidation|Site Submission|Francopia,True
+Consolidation|Site Submission|Trading,True
+Consolidation|Site Submission|Vertolaye,True
+Consolidation|Site Submission|Elbeuf,True
+TOPLINE|CDMO COGS Load|Center,True
+Consolidation|Stock load|Center,True
+TOPLINE|Biano Sales|Center,False
+Consolidation|True-UP|Center,False
+Consolidation|Distribution centers|Center,False
+Consolidation|Load BFC data to TM1|Center,False
+Consolidation|Stock true-up with BFC|Center,False
+Consolidation|Core EBITDA Adjustments|Center,False
+Consolidation|Indirect Cash Flow|Center,False
+TOPLINE|Demand load|Center,False
+General|Master Data Maintenance|Center,False

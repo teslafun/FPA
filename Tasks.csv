@@ -1,0 +1,31 @@
+Process;Task;Owner;Location;When;Source
+Consolidation;Closing Initialization;Laszlo;Center;D-3;
+TOPLINE;TM1 Sales and COGS loading;Laszlo;Center;Daily;SAP BW
+Headcount;Headcount import;Laszlo;Center;D+1;Workday
+Consolidation;FX rates loading;Laszlo;Center;D+1;Treasury
+Consolidation;Staging Load;Laszlo;Center;D+1;SAP BW
+TOPLINE;Sales Loop;Laszlo;Center;D+2;SQL
+TOPLINE;CDMO Revenue Load;Johanna;Center;D+2;SAP
+TOPLINE;Reference Standard COGS loading;Laszlo;Center;D+2;SAP
+TOPLINE;Other Revenue;Laszlo;Center;D+2;SAP
+TOPLINE;Sales Flash;Alexandre;Center;D+2;TM1
+Headcount;Hierarchy syncing;Laszlo;Center;D+2;TM1
+Consolidation;D&A Loading;Laszlo;Center;D+3;SAP BW
+Consolidation;Site Submission;Zsolt;Ujpest;D+3;SAP BW
+Consolidation;Site Submission;Volha;Frankfurt;D+3;SAP BW
+Consolidation;Site Submission;Michela;Brindisi;D+3;SAP BW
+Consolidation;Site Submission;Leann;Francopia;D+3;SAP BW
+Consolidation;Site Submission;Leann;Trading;D+3;SAP BW
+Consolidation;Site Submission;Damien;Vertolaye;D+3;SAP BW
+Consolidation;Site Submission;Noemie;Elbeuf;D+3;SAP BW
+TOPLINE;CDMO COGS Load;Johanna;Center;D+4;SAP
+Consolidation;Stock load;Davide;Center;D+4;SAP BW
+TOPLINE;Biano Sales;Laszlo;Center;D+5;BFC
+Consolidation;True-UP;Laszlo;Center;D+6;BFC
+Consolidation;Distribution centers;Laszlo;Center;D+6;BFC
+Consolidation;Load BFC data to TM1;Laszlo;Center;D+6;BFC
+Consolidation;Stock true-up with BFC;Laszlo;Center;D+6;BFC
+Consolidation;Core EBITDA Adjustments;Laszlo;Center;D+7;Taieb
+Consolidation;Indirect Cash Flow;Laszlo;Center;D+7;Clemence
+TOPLINE;Demand load;Laszlo;Center;D+8;Colibri
+General;Master Data Maintenance;Laszlo;Center;D+9;SAP
