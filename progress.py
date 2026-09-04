@@ -21,7 +21,6 @@ st.set_page_config(
 # ==================================================
 
 def sort_when(value):
-
     value = str(value).strip()
 
     if value.upper() == "DAILY":
@@ -30,10 +29,8 @@ def sort_when(value):
     match = re.match(r"D([+-])(\d+)", value)
 
     if match:
-
         sign = match.group(1)
         number = int(match.group(2))
-
         return -number if sign == "-" else number
 
     return 999
@@ -60,15 +57,12 @@ df["TaskID"] = (
 )
 
 # ==================================================
-# LOAD AND MERGE STATUS FILE
+# LOAD + MERGE STATUS FILE
 # ==================================================
 
 if Path(STATUS_FILE).exists():
-
     status_df = pd.read_csv(STATUS_FILE)
-
 else:
-
     status_df = pd.DataFrame(
         columns=["TaskID", "Completed"]
     )
@@ -102,21 +96,26 @@ status_map = dict(
 )
 
 # ==================================================
-# SESSION STATE
+# SESSION STATE INITIALIZATION
 # ==================================================
 
 if "task_status" not in st.session_state:
-
     st.session_state.task_status = status_map.copy()
 
+# Initialize checkbox widgets
+for task_id, completed in status_map.items():
+
+    if task_id not in st.session_state:
+        st.session_state[task_id] = completed
+
 # ==================================================
-# SIDEBAR FILTERS
+# SIDEBAR
 # ==================================================
 
 st.sidebar.title("Filters")
 
 # ----------------------
-# Process
+# Process Filter
 # ----------------------
 
 processes = sorted(
@@ -131,15 +130,12 @@ selected_process = st.sidebar.selectbox(
 )
 
 # ----------------------
-# Location
+# Location Filter
 # ----------------------
 
 if selected_process == "All":
-
     location_df = df.copy()
-
 else:
-
     location_df = df[
         df["Process"] == selected_process
     ]
@@ -156,13 +152,12 @@ selected_location = st.sidebar.selectbox(
 )
 
 # ----------------------
-# Owner
+# Owner Filter
 # ----------------------
 
 owner_df = location_df.copy()
 
 if selected_location != "All":
-
     owner_df = owner_df[
         owner_df["Location"] == selected_location
     ]
@@ -179,6 +174,49 @@ selected_owner = st.sidebar.selectbox(
 )
 
 # ==================================================
+# RESET SECTION
+# ==================================================
+
+st.sidebar.markdown("---")
+
+confirm_reset = st.sidebar.checkbox(
+    "Confirm reset"
+)
+
+if st.sidebar.button("Reset All Tasks"):
+
+    if not confirm_reset:
+
+        st.sidebar.error(
+            "Please tick 'Confirm reset' first."
+        )
+
+    else:
+
+        # Reset dictionary
+        for task_id in list(
+            st.session_state.task_status.keys()
+        ):
+            st.session_state.task_status[task_id] = False
+
+        # Reset checkbox widgets
+        for task_id in df["TaskID"]:
+            st.session_state[task_id] = False
+
+        # Rewrite status file
+        reset_df = pd.DataFrame({
+            "TaskID": df["TaskID"],
+            "Completed": False
+        })
+
+        reset_df.to_csv(
+            STATUS_FILE,
+            index=False
+        )
+
+        st.rerun()
+
+# ==================================================
 # HEADER
 # ==================================================
 
@@ -191,19 +229,16 @@ st.title("📊 FP&A Readiness Dashboard")
 display_df = df.copy()
 
 if selected_process != "All":
-
     display_df = display_df[
         display_df["Process"] == selected_process
     ]
 
 if selected_location != "All":
-
     display_df = display_df[
         display_df["Location"] == selected_location
     ]
 
 if selected_owner != "All":
-
     display_df = display_df[
         display_df["Owner"] == selected_owner
     ]
@@ -224,7 +259,7 @@ display_df = display_df.sort_values(
 )
 
 # ==================================================
-# TASK CHECKLIST
+# CHECKLIST
 # ==================================================
 
 st.subheader("✅ Task Checklist")
@@ -244,14 +279,14 @@ for milestone, group in display_df.groupby(
             f"| {row['Location']}"
         )
 
-        st.session_state.task_status[row["TaskID"]] = st.checkbox(
+        checked = st.checkbox(
             label,
-            value=st.session_state.task_status.get(
-                row["TaskID"],
-                False
-            ),
             key=row["TaskID"]
         )
+
+        st.session_state.task_status[
+            row["TaskID"]
+        ] = checked
 
 # ==================================================
 # SAVE STATUS
@@ -291,14 +326,12 @@ st.subheader("📈 Overall Readiness")
 col1, col2 = st.columns([1, 4])
 
 with col1:
-
     st.metric(
         "Completion",
         f"{overall_progress:.0%}"
     )
 
 with col2:
-
     st.progress(
         float(overall_progress)
     )
@@ -354,7 +387,7 @@ st.dataframe(
 )
 
 # ==================================================
-# PROGRESS CHART
+# CHART
 # ==================================================
 
 fig = px.bar(
@@ -409,7 +442,9 @@ pending = pending.sort_values(
 
 if pending.empty:
 
-    st.success("✅ All tasks completed.")
+    st.success(
+        "✅ All tasks completed."
+    )
 
 else:
 
@@ -448,7 +483,7 @@ st.download_button(
 )
 
 # ==================================================
-# STATS
+# STATISTICS
 # ==================================================
 
 completed_tasks = int(df["Completed"].sum())
@@ -457,27 +492,3 @@ total_tasks = len(df)
 st.caption(
     f"Completed {completed_tasks}/{total_tasks} tasks"
 )
-
-# ==================================================
-# RESET
-# ==================================================
-
-if st.sidebar.button("Reset All Tasks"):
-
-    for task_id in st.session_state.task_status:
-
-        st.session_state.task_status[task_id] = False
-
-    pd.DataFrame({
-        "TaskID": list(
-            st.session_state.task_status.keys()
-        ),
-        "Completed": list(
-            st.session_state.task_status.values()
-        )
-    }).to_csv(
-        STATUS_FILE,
-        index=False
-    )
-
-    st.rerun()
